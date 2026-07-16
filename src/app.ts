@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import { notFound } from './middlewares/notFound'
 import { userRoutes } from './modules/user/user.route'
 import { globalErrorHandler } from './middlewares/globalErrorHandler'
+import { authRoutes } from './modules/auth/auth.route'
 
 const app: Application = express()
 
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/api/users", userRoutes)
+app.use("/api/auth", authRoutes)
 
 app.use(notFound)
 
