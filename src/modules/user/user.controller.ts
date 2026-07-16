@@ -17,7 +17,20 @@ const registerUser = catchAsync(async (req, res, next) => {
     })
 })
 
-const getMyProfile = () => { }
+const getMyProfile = catchAsync(async (req, res, next) => {
+
+    const userId = req.user?.id
+
+    const result = await userService.getMyProfile(userId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User profile fetched successfully',
+        data: result
+    })
+
+})
 
 const updateMyProfile = () => { }
 

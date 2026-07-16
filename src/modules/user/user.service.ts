@@ -57,7 +57,25 @@ const registerUser = async (payload: IRegisterUserPayload) => {
     return user
 }
 
-const getMyProfile = () => { }
+const getMyProfile = (userId: string) => {
+    const user = prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        omit: {
+            password: true
+        },
+        include: {
+            technicianProfile: true
+        }
+    })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    return user
+}
 
 const updateMyProfile = () => { }
 
