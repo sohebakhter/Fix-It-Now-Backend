@@ -8,5 +8,7 @@ model TechnicianProfile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  availabilities Availability[]
+
   @@map("technician_profiles")
 }

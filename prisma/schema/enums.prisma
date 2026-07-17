@@ -19,6 +19,7 @@ enum ServiceStatus {
 }
 
 enum BookingStatus {
+  PENDING
   REQUESTED
   ACCEPTED
   DECLINED

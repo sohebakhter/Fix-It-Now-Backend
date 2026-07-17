@@ -13,6 +13,7 @@ model User {
   services          Service[]
   reviews           Review[]
   bookings          Booking[]
+  availabilities    Availability[]
 
   @@map("users")
 }
