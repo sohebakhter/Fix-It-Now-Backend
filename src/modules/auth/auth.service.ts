@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs"
 import { jwtHelpers } from "../../utils/jwt"
 import config from "../../config"
 import { Sign } from "node:crypto"
-import { SignOptions } from "jsonwebtoken"
+import { JwtPayload, SignOptions } from "jsonwebtoken"
 import { ILoginUserPayload } from "./auth.interface"
 
 const loginUser = async (payload: ILoginUserPayload) => {
@@ -38,6 +38,41 @@ const loginUser = async (payload: ILoginUserPayload) => {
 
 }
 
+const refreshToken = async (token: string) => {
+    const verifiedToken = jwtHelpers.verifyToken(token, config.jwt_refresh_secret as string)
+
+    if (!verifiedToken.success) {
+        throw new Error('Invalid refresh token')
+    }
+
+    const { id, } = verifiedToken.data as JwtPayload
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id
+        }
+    })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    if (user.status === "BAN") {
+        throw new Error('User is banned')
+    }
+
+    const jwtPayload = {
+        id: user?.id,
+        email: user?.email,
+        role: user?.role
+    }
+
+    const newAccessToken = jwtHelpers.createToken(jwtPayload as JwtPayload, config.jwt_access_secret as string, config.jwt_access_expires_in as SignOptions);
+
+    return newAccessToken;
+}
+
 export const authService = {
-    loginUser
+    loginUser,
+    refreshToken
 }

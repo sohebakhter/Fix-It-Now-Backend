@@ -6,6 +6,8 @@ import { notFound } from './middlewares/notFound'
 import { userRoutes } from './modules/user/user.route'
 import { globalErrorHandler } from './middlewares/globalErrorHandler'
 import { authRoutes } from './modules/auth/auth.route'
+import { serviceRoutes } from './modules/service/service.route'
+import { categoryRoutes } from './modules/category/category.route'
 
 const app: Application = express()
 
@@ -23,6 +25,8 @@ app.get('/', (req, res) => {
 
 app.use("/api/users", userRoutes)
 app.use("/api/auth", authRoutes)
+app.use("/api/services", serviceRoutes)
+app.use("/api/categories", categoryRoutes)
 
 app.use(notFound)
 
