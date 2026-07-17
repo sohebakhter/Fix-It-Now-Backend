@@ -1,10 +1,28 @@
 enum UserRole {
-    CUSTOMER
-    TECHNICIAN
-    ADMIN
+  CUSTOMER
+  TECHNICIAN
+  ADMIN
 }
 
 enum UserStatus {
-    BAN
-    UN_BAN
+  BAN
+  UN_BAN
+}
+
+enum ServiceStatus {
+  PENDING
+  IN_PROGRESS
+  ACCEPT
+  DECLINE
+  COMPLETED
+  CANCELLED
+}
+
+enum BookingStatus {
+  REQUESTED
+  ACCEPTED
+  DECLINED
+  PAID
+  IN_PROGRESS
+  COMPLETED
 }
