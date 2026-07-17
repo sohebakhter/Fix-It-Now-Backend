@@ -9,4 +9,6 @@ router.post("/create", auth(UserRole.TECHNICIAN), serviceController.createServic
 
 router.get("/", serviceController.getAllServices);
 
+router.delete("/:serviceId", auth(UserRole.TECHNICIAN, UserRole.ADMIN), serviceController.deleteService);
+
 export const serviceRoutes = router;

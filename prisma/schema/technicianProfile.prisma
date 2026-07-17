@@ -9,6 +9,7 @@ model TechnicianProfile {
   updatedAt DateTime @updatedAt
 
   availabilities Availability[]
+  services       Service[]
 
   @@map("technician_profiles")
 }

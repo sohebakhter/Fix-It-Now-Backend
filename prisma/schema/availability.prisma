@@ -7,8 +7,6 @@ model Availability {
   startTime String
   endTime   String
 
-  isBooked Boolean @default(false)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
