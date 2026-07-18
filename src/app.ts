@@ -10,6 +10,7 @@ import { serviceRoutes } from './modules/service/service.route'
 import { categoryRoutes } from './modules/category/category.route'
 import { availabilityRoutes } from './modules/availability/availability.route'
 import { bookingRoutes } from './modules/booking/booking.route'
+import { paymentRoutes } from './modules/payment/payment.route'
 
 const app: Application = express()
 
@@ -31,6 +32,7 @@ app.use("/api/services", serviceRoutes)
 app.use("/api/categories", categoryRoutes)
 app.use("/api/availabilities", availabilityRoutes)
 app.use("/api/bookings", bookingRoutes)
+app.use("/api/payments", paymentRoutes)
 
 app.use(notFound)
 

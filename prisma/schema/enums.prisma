@@ -26,3 +26,9 @@ enum BookingStatus {
   IN_PROGRESS
   COMPLETED
 }
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}

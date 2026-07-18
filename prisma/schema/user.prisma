@@ -6,6 +6,8 @@ model User {
   role     UserRole   @default(CUSTOMER)
   status   UserStatus @default(UN_BAN)
 
+  stripeCustomerId String? @unique
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -13,6 +15,7 @@ model User {
   services          Service[]
   reviews           Review[]
   bookings          Booking[]
+  payments          Payment[]
 
   @@map("users")
 }
