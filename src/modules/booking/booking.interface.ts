@@ -5,3 +5,8 @@ export interface IBookingPayload {
     availabilityId: string;
     status?: BookingStatus;
 }
+
+export interface IUpdateBookingStatusPayload {
+    bookingId: string;
+    status: BookingStatus;
+}

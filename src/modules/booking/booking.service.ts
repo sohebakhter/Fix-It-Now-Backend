@@ -1,6 +1,6 @@
 import { BookingStatus, ServiceStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
-import { IBookingPayload } from "./booking.interface"
+import { IBookingPayload, IUpdateBookingStatusPayload } from "./booking.interface"
 
 const createBooking = async (customerId: string, payload: IBookingPayload) => {
 
@@ -115,8 +115,96 @@ const getMyBookings = async (customerId: string) => {
     return bookings;
 }
 
+const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBookingStatusPayload) => {
+
+    const { bookingId, status } = payload
+
+    const booking = await prisma.booking.findUnique({
+        where: {
+            id: bookingId
+        },
+        include: {
+            service: true,
+            availability: true,
+            customer: {
+                omit: {
+                    password: true,
+                }
+            }
+        }
+    });
+
+    if (!booking) {
+        throw new Error("Booking not found");
+    }
+
+    const service = await prisma.service.findUnique({
+        where: {
+            id: booking.serviceId
+        }
+    });
+
+    if (!service) {
+        throw new Error("Service not found");
+    }
+
+    const technicianProfile = await prisma.technicianProfile.findUnique({
+        where: {
+            userId: authorizedUserId
+        }
+    })
+
+    if (service.technicianId !== technicianProfile?.id) {
+        throw new Error("Unauthorized");
+    }
+
+    if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.ACCEPTED) {
+        await prisma.booking.update({
+            where: {
+                id: bookingId
+            },
+            data: {
+                status: BookingStatus.ACCEPTED
+            },
+            include: {
+                service: true,
+                availability: true,
+                customer: {
+                    omit: {
+                        password: true,
+                    }
+                }
+            }
+        });
+    }
+
+    if (booking.status === BookingStatus.IN_PROGRESS && status === BookingStatus.COMPLETED) {
+        await prisma.booking.update({
+            where: {
+                id: bookingId
+            },
+            data: {
+                status: BookingStatus.COMPLETED
+            },
+            include: {
+                service: true,
+                availability: true,
+                customer: {
+                    omit: {
+                        password: true,
+                    }
+                }
+            }
+        });
+    }
+
+
+    return booking
+}
+
 export const bookingService = {
     createBooking,
     getAllBookings,
-    getMyBookings
+    getMyBookings,
+    updateBookingStatus
 }

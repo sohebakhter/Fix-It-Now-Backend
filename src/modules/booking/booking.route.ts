@@ -11,4 +11,6 @@ router.get("/", bookingController.getAllBookings);
 
 router.get("/my-bookings", auth(UserRole.CUSTOMER), bookingController.getMyBookings);
 
+router.patch("/technician", auth(UserRole.TECHNICIAN), bookingController.updateBookingStatus);
+
 export const bookingRoutes = router;
