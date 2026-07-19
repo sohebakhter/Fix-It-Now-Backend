@@ -1,12 +1,12 @@
 import { Stripe } from "stripe";
-import { PaymentStatus, UserRole } from "../../../generated/prisma/enums";
+import { BookingStatus, PaymentStatus, UserRole } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
 import { handlePaymentIntentSucceeded } from "./payment.utils";
 
 const createCheckoutSession = async (userId: string, bookingId: string) => {
-    // ১. ইউজার ভ্যালিডেশন
+
     const user = await prisma.user.findUnique({
         where: { id: userId },
     });
@@ -17,7 +17,6 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
         throw new Error("Only customers and admins can create a checkout session");
     }
 
-    // ২. বুকিং ও পেমেন্ট স্ট্যাটাস আগেই চেক করা (স্ট্রাইপ কল করার আগে)
     const booking = await prisma.booking.findUnique({
         where: { id: bookingId },
         include: { service: true },
@@ -25,18 +24,20 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
 
     if (!booking) throw new Error("Booking not found");
 
+    if (booking.status !== BookingStatus.ACCEPTED) {
+        throw new Error("Only accepted bookings can be paid for");
+    }
+
     const existingPayment = await prisma.payment.findUnique({
         where: { bookingId },
     });
 
-    // পেমেন্ট যদি অলরেডি সাকসেস বা ফেইল্ড হয়ে থাকে, তবে আটকে দেবে
     if (existingPayment && existingPayment.status === PaymentStatus.PAID) {
         throw new Error("Payment already completed for this booking");
     }
 
     let customerId = user.stripeCustomerId;
 
-    // ৩. স্ট্রাইপ কাস্টমার না থাকলে তৈরি করা
     if (!customerId) {
         const customer = await stripe.customers.create({
             email: user.email,
@@ -44,14 +45,13 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
         });
         customerId = customer.id;
 
-        // ট্রানজেকশন ছাড়াই ইউজার আপডেট করে নেওয়া ভালো, কারণ এটি ওয়ান-টাইম অপারেশন
+
         await prisma.user.update({
             where: { id: userId },
             data: { stripeCustomerId: customerId },
         });
     }
 
-    // ৪. স্ট্রাইপ সেশন তৈরি করা
     const session = await stripe.checkout.sessions.create({
         line_items: [
             {
@@ -76,16 +76,16 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
         },
     });
 
-    // ৫. প্রিজমা ট্রানজেকশন (Prisma Transaction) ব্যবহার করে পেমেন্ট রেকর্ড তৈরি বা আপডেট করা
+
     await prisma.$transaction(async (tx) => {
         if (existingPayment) {
-            // যদি আগে থেকেই PENDING পেমেন্ট থাকে, তবে স্ট্রাইপ সেশন আইডি আপডেট করো
+
             await tx.payment.update({
                 where: { bookingId },
                 data: { stripeCheckoutSessionId: session.id }
             });
         } else {
-            // নতুন পেমেন্ট রেকর্ড তৈরি
+
             await tx.payment.create({
                 data: {
                     bookingId,
@@ -124,7 +124,7 @@ const handleStripeWebhook = async (payload: any, stripeSignature: string) => {
             // Then define and call a method to handle the successful attachment of a PaymentMethod.
             // handlePaymentMethodAttached(paymentMethod);
             break;
-            case 'payment_intent.payment_failed':
+        case 'payment_intent.payment_failed':
             const paymentIntentFailed = event.data.object;
             // Then define and call a method to handle the successful payment intent.
             // await handlePaymentIntentFailed(paymentIntentFailed);
