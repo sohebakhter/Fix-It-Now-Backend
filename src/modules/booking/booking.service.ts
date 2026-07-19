@@ -116,13 +116,42 @@ const getMyBookings = async (customerId: string) => {
 }
 
 const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBookingStatusPayload) => {
-
-    const { bookingId, status } = payload
+    const { bookingId, status } = payload;
 
     const booking = await prisma.booking.findUnique({
-        where: {
-            id: bookingId
-        },
+        where: { id: bookingId },
+        include: { service: true }
+    });
+
+    if (!booking) {
+        throw new Error("Booking not found");
+    }
+
+    if (!booking.service) {
+        throw new Error("Service associated with this booking not found");
+    }
+
+    const technicianProfile = await prisma.technicianProfile.findUnique({
+        where: { userId: authorizedUserId }
+    });
+
+    if (booking.service.technicianId !== technicianProfile?.id) {
+        throw new Error("Unauthorized: Only the assigned technician can update this booking");
+    }
+
+    let nextStatus: BookingStatus | null = null;
+
+    if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.ACCEPTED) {
+        nextStatus = BookingStatus.ACCEPTED;
+    } else if (booking.status === BookingStatus.IN_PROGRESS && status === BookingStatus.COMPLETED) {
+        nextStatus = BookingStatus.COMPLETED;
+    } else {
+        throw new Error(`Invalid status transition from ${booking.status} to ${status}`);
+    }
+
+    const updatedBooking = await prisma.booking.update({
+        where: { id: bookingId },
+        data: { status: nextStatus },
         include: {
             service: true,
             availability: true,
@@ -134,73 +163,8 @@ const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBoo
         }
     });
 
-    if (!booking) {
-        throw new Error("Booking not found");
-    }
-
-    const service = await prisma.service.findUnique({
-        where: {
-            id: booking.serviceId
-        }
-    });
-
-    if (!service) {
-        throw new Error("Service not found");
-    }
-
-    const technicianProfile = await prisma.technicianProfile.findUnique({
-        where: {
-            userId: authorizedUserId
-        }
-    })
-
-    if (service.technicianId !== technicianProfile?.id) {
-        throw new Error("Unauthorized");
-    }
-
-    if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.ACCEPTED) {
-        await prisma.booking.update({
-            where: {
-                id: bookingId
-            },
-            data: {
-                status: BookingStatus.ACCEPTED
-            },
-            include: {
-                service: true,
-                availability: true,
-                customer: {
-                    omit: {
-                        password: true,
-                    }
-                }
-            }
-        });
-    }
-
-    if (booking.status === BookingStatus.IN_PROGRESS && status === BookingStatus.COMPLETED) {
-        await prisma.booking.update({
-            where: {
-                id: bookingId
-            },
-            data: {
-                status: BookingStatus.COMPLETED
-            },
-            include: {
-                service: true,
-                availability: true,
-                customer: {
-                    omit: {
-                        password: true,
-                    }
-                }
-            }
-        });
-    }
-
-
-    return booking
-}
+    return updatedBooking;
+};
 
 export const bookingService = {
     createBooking,
