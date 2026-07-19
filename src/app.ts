@@ -11,6 +11,7 @@ import { categoryRoutes } from './modules/category/category.route'
 import { availabilityRoutes } from './modules/availability/availability.route'
 import { bookingRoutes } from './modules/booking/booking.route'
 import { paymentRoutes } from './modules/payment/payment.route'
+import { reviewRoutes } from './modules/review/review.route'
 
 const app: Application = express()
 
@@ -19,7 +20,7 @@ app.use(cors({
     credentials: true
 }))
 // webhook
-app.use("/api/payments/webhook",express.raw({ type: 'application/json' }))
+app.use("/api/payments/webhook", express.raw({ type: 'application/json' }))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -36,6 +37,7 @@ app.use("/api/categories", categoryRoutes)
 app.use("/api/availabilities", availabilityRoutes)
 app.use("/api/bookings", bookingRoutes)
 app.use("/api/payments", paymentRoutes)
+app.use("/api/reviews", reviewRoutes)
 
 app.use(notFound)
 

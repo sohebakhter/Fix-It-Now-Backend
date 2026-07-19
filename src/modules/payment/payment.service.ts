@@ -30,8 +30,8 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
     });
 
     // পেমেন্ট যদি অলরেডি সাকসেস বা ফেইল্ড হয়ে থাকে, তবে আটকে দেবে
-    if (existingPayment && existingPayment.status !== PaymentStatus.PENDING) {
-        throw new Error("Payment already completed or failed for this booking");
+    if (existingPayment && existingPayment.status === PaymentStatus.PAID) {
+        throw new Error("Payment already completed for this booking");
     }
 
     let customerId = user.stripeCustomerId;

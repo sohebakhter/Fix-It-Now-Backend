@@ -17,5 +17,7 @@ model Booking {
 
   payment Payment?
 
+  review Review?
+
   @@map("bookings")
 }

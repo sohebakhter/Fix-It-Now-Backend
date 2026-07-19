@@ -10,25 +10,24 @@ enum UserStatus {
 }
 
 enum ServiceStatus {
-  PENDING
-  IN_PROGRESS
-  ACCEPT
-  DECLINE
-  COMPLETED
-  CANCELLED
+  PENDING // Admin approval-এর অপেক্ষায়
+  ACTIVE // সবাই বুক করতে পারবে
+  INACTIVE // সাময়িকভাবে বন্ধ
+  CANCELLED // Permanently removed
 }
 
 enum BookingStatus {
   REQUESTED
   ACCEPTED
   DECLINED
-  PAID
   IN_PROGRESS
   COMPLETED
+  CANCELLED
 }
 
 enum PaymentStatus {
   PENDING
   PAID
   FAILED
+  REFUNDED
 }
