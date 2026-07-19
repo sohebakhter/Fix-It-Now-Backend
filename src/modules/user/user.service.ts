@@ -1,7 +1,8 @@
 import config from "../../config"
 import { prisma } from "../../lib/prisma"
 import bcrypt from "bcryptjs"
-import { IRegisterUserPayload, IUpdateUserPayload } from "./user.interface"
+import { IRegisterUserPayload, IUpdateUserPayload, IUpdateUserPayloadForAdmin } from "./user.interface"
+import { UserRole } from "../../../generated/prisma/enums"
 
 const registerUser = async (payload: IRegisterUserPayload) => {
 
@@ -114,24 +115,70 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserPayload) => {
 }
 
 const deleteMyProfile = async (userId: string) => {
-
     const user = await prisma.user.findUnique({
-        where: {
-            id: userId
-        }
-    })
+        where: { id: userId },
+    });
 
     if (!user) {
-        throw new Error('User not found')
-    }
-
-    const isOwn = user.id === userId
-
-    if (!isOwn) {
-        throw new Error('You can only delete your own profile')
+        throw new Error("User not found");
     }
 
     return prisma.user.delete({
+        where: { id: userId },
+    });
+};
+
+const updateUser = async (adminId: string, userId: string, payload: IUpdateUserPayloadForAdmin) => {
+
+    const admin = await prisma.user.findUnique({
+        where: { id: adminId }
+    });
+
+    if (!admin || admin.role !== UserRole.ADMIN) {
+        throw new Error('Only admins can perform this action');
+    }
+
+    const isUserExist = await prisma.user.findUnique({
+        where: { id: userId }
+    });
+    if (!isUserExist) {
+        throw new Error('User not found');
+    }
+
+    const updateData: any = { ...payload };
+
+    if (payload.password) {
+        updateData.password = await bcrypt.hash(
+            payload.password,
+            Number(config.bcrypt_salt)
+        );
+    } else {
+        delete updateData.password;
+    }
+
+    const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: updateData,
+        omit: { password: true }
+    });
+
+    return updatedUser;
+};
+
+
+const deleteUser = async (adminId: string, userId: string) => {
+
+    const isAdmin = await prisma.user.findUnique({
+        where: {
+            id: adminId
+        }
+    })
+
+    if (isAdmin?.role !== UserRole.ADMIN) {
+        throw new Error('Only admins can perform this action')
+    }
+
+    return await prisma.user.delete({
         where: {
             id: userId
         }
@@ -142,5 +189,7 @@ export const userService = {
     registerUser,
     getMyProfile,
     updateMyProfile,
-    deleteMyProfile
+    deleteMyProfile,
+    updateUser,
+    deleteUser
 }

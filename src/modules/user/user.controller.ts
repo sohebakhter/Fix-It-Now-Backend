@@ -64,9 +64,44 @@ const deleteMyProfile = catchAsync(async (req, res, next) => {
     })
 })
 
+const updateUser = catchAsync(async (req, res, next) => {
+
+    const adminId = req.user?.id
+    const userId = req.params.id
+    const payload = req.body
+
+    const result = await userService.updateUser(adminId as string, userId as string, payload)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User updated successfully',
+        data: result
+    })
+
+})
+
+const deleteUser = catchAsync(async (req, res, next) => {
+
+    const adminId = req.user?.id
+    const userId = req.params.id
+
+    const result = await userService.deleteUser(adminId as string, userId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User deleted successfully',
+        data: result
+    })
+
+})
+
 export const userController = {
     registerUser,
     getMyProfile,
     updateMyProfile,
-    deleteMyProfile
+    deleteMyProfile,
+    updateUser,
+    deleteUser
 }

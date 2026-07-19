@@ -15,3 +15,11 @@ export interface IUpdateUserPayload {
     // role?: UserRole;
     experience?: number;
 }
+export interface IUpdateUserPayloadForAdmin {
+    name?: string;
+    password?: string;
+    role?: UserRole;
+
+    experience?: number;
+    rating?: number;
+}
