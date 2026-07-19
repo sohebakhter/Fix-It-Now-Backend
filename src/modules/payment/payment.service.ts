@@ -1,7 +1,9 @@
+import { Stripe } from "stripe";
 import { PaymentStatus, UserRole } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe";
+import { handlePaymentIntentSucceeded } from "./payment.utils";
 
 const createCheckoutSession = async (userId: string, bookingId: string) => {
     // ১. ইউজার ভ্যালিডেশন
@@ -96,11 +98,47 @@ const createCheckoutSession = async (userId: string, bookingId: string) => {
             });
         }
     });
-
-    console.log("Checkout session created and saved:", session);
     return session;
+}
+
+const handleStripeWebhook = async (payload: any, stripeSignature: string) => {
+    const endpointSecret = config.stripe_webhook_secret as string;
+    // Only verify the event if you have an endpoint secret defined.
+    // Otherwise use the basic event deserialized with JSON.parse
+
+    const event = stripe.webhooks.constructEvent(
+        payload,
+        stripeSignature,
+        endpointSecret
+    );
+
+    // Handle the event
+    switch (event.type) {
+        case 'payment_intent.succeeded':
+            const paymentIntent = event.data.object;
+            // Then define and call a method to handle the successful payment intent.
+            await handlePaymentIntentSucceeded(paymentIntent);
+            break;
+        case 'payment_method.attached':
+            const paymentMethod = event.data.object;
+            // Then define and call a method to handle the successful attachment of a PaymentMethod.
+            // handlePaymentMethodAttached(paymentMethod);
+            break;
+            case 'payment_intent.payment_failed':
+            const paymentIntentFailed = event.data.object;
+            // Then define and call a method to handle the successful payment intent.
+            // await handlePaymentIntentFailed(paymentIntentFailed);
+            break;
+
+
+        default:
+            // Unexpected event type
+            console.log(`Unhandled event type ${event.type}.`);
+            break;
+    }
 }
 
 export const paymentService = {
     createCheckoutSession,
+    handleStripeWebhook,
 }

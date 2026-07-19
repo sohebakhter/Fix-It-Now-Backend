@@ -7,5 +7,6 @@ const router = Router();
 
 router.post("/checkout", auth(UserRole.CUSTOMER, UserRole.TECHNICIAN, UserRole.ADMIN), paymentController.createCheckoutSession);
 
+router.post("/webhook", paymentController.handleStripeWebhook);
 
 export const paymentRoutes = router;
