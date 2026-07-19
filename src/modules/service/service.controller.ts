@@ -27,6 +27,17 @@ const getAllServices = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getMyServices = catchAsync(async (req: Request, res: Response) => {
+    const authorizedUserId = req.user?.id;
+    const services = await serviceService.getMyServices(authorizedUserId as string);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Services fetched successfully',
+        data: services
+    });
+})
+
 const deleteService = catchAsync(async (req: Request, res: Response) => {
     const authorizedUserId = req.user?.id; // Assuming the user ID is available in the request object
     const { serviceId } = req.params;
@@ -42,5 +53,6 @@ const deleteService = catchAsync(async (req: Request, res: Response) => {
 export const serviceController = {
     createService,
     getAllServices,
-    deleteService
+    deleteService,
+    getMyServices,
 }

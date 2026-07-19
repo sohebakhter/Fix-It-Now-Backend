@@ -9,6 +9,10 @@ router.post("/create", auth(UserRole.TECHNICIAN), serviceController.createServic
 
 router.get("/", serviceController.getAllServices);
 
+router.get("/my-services", auth(UserRole.TECHNICIAN), serviceController.getMyServices);
+
+// router.patch("/:serviceId", auth(UserRole.TECHNICIAN), serviceController.updateService);
+
 router.delete("/:serviceId", auth(UserRole.TECHNICIAN, UserRole.ADMIN), serviceController.deleteService);
 
 export const serviceRoutes = router;

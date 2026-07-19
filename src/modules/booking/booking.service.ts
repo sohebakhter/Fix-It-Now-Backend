@@ -22,7 +22,7 @@ const createBooking = async (customerId: string, payload: IBookingPayload) => {
             throw new Error("Service not found");
         }
 
-        if (service.status !== ServiceStatus.PENDING) {
+        if (service.status !== ServiceStatus.ACTIVE) {
             throw new Error("Service is not available");
         }
 
@@ -66,14 +66,14 @@ const createBooking = async (customerId: string, payload: IBookingPayload) => {
             }
         })
 
-        await tx.service.update({
-            where: {
-                id: serviceId
-            },
-            data: {
-                status: ServiceStatus.IN_PROGRESS
-            }
-        })
+        // await tx.service.update({
+        //     where: {
+        //         id: serviceId
+        //     },
+        //     data: {
+        //         status: ServiceStatus.ACTIVE
+        //     }
+        // })
 
         return booking
     })
@@ -97,7 +97,26 @@ const getAllBookings = async () => {
     return bookings;
 }
 
+const getMyBookings = async (customerId: string) => {
+    const bookings = await prisma.booking.findMany({
+        where: {
+            customerId: customerId
+        },
+        include: {
+            service: true,
+            availability: true,
+            customer: {
+                omit: {
+                    password: true,
+                }
+            }
+        }
+    });
+    return bookings;
+}
+
 export const bookingService = {
     createBooking,
-    getAllBookings
+    getAllBookings,
+    getMyBookings
 }
