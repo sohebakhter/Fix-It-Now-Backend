@@ -38,6 +38,25 @@ const getMyServices = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const updateService = catchAsync(async (req: Request, res: Response) => {
+    const authorizedUserId = req.user?.id;
+    const serviceId = req.params.serviceId;
+    const payload = req.body;
+
+    const updatedService = await serviceService.updateService(
+        authorizedUserId as string,
+        serviceId as string,
+        payload
+    );
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Service updated successfully",
+        data: updatedService,
+    });
+});
+
 const deleteService = catchAsync(async (req: Request, res: Response) => {
     const authorizedUserId = req.user?.id; // Assuming the user ID is available in the request object
     const { serviceId } = req.params;
@@ -55,4 +74,5 @@ export const serviceController = {
     getAllServices,
     deleteService,
     getMyServices,
+    updateService
 }

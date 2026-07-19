@@ -1,6 +1,6 @@
 import { BookingStatus, ServiceStatus, UserRole } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
-import { IServicePayload } from "./service.interface";
+import { IServicePayload, IServicePayloadForUpdate } from "./service.interface";
 
 const createService = async (userId: string, payload: IServicePayload) => {
     const transactionResult = await prisma.$transaction(async (tx) => {
@@ -57,23 +57,22 @@ const getAllServices = async () => {
     });
     return services;
 }
-
-const deleteService = async (authorizedUserId: string, serviceId: string) => {
-
-    const technicianProfile = await prisma.technicianProfile.findUnique({
-        where: {
-            userId: authorizedUserId,
-        },
-    });
-
+const updateService = async (
+    authorizedUserId: string,
+    serviceId: string,
+    payload: IServicePayloadForUpdate
+) => {
     const user = await prisma.user.findUnique({
         where: {
             id: authorizedUserId,
         },
+        include: {
+            technicianProfile: true,
+        },
     });
 
-    if (user?.role !== UserRole.ADMIN && !technicianProfile) {
-        throw new Error("Only admins can delete services or technicians can delete their own services");
+    if (!user) {
+        throw new Error("User not found");
     }
 
     const service = await prisma.service.findUnique({
@@ -86,18 +85,106 @@ const deleteService = async (authorizedUserId: string, serviceId: string) => {
         throw new Error("Service not found");
     }
 
+    // Authorization
+    if (user.role !== UserRole.ADMIN) {
+        if (!user.technicianProfile) {
+            throw new Error(
+                "Only admins or technicians can update services"
+            );
+        }
 
-    await prisma.service.delete({
+        if (service.technicianId !== user.technicianProfile.id) {
+            throw new Error("You can only update your own services");
+        }
+    }
+
+    // Validate category only if categoryId is provided
+    if (payload.categoryId) {
+        const category = await prisma.category.findUnique({
+            where: {
+                id: payload.categoryId,
+            },
+        });
+
+        if (!category) {
+            throw new Error("Category not found");
+        }
+    }
+
+    return prisma.service.update({
+        where: {
+            id: serviceId,
+        },
+        data: {
+            title: payload.title,
+            description: payload.description,
+            price: payload.price,
+
+            ...(payload.categoryId && {
+                category: {
+                    connect: {
+                        id: payload.categoryId,
+                    },
+                },
+            }),
+        },
+        include: {
+            category: true,
+        },
+    });
+};
+
+const deleteService = async (
+    authorizedUserId: string,
+    serviceId: string
+) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id: authorizedUserId,
+        },
+        include: {
+            technicianProfile: true,
+        },
+    });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    const service = await prisma.service.findUnique({
+        where: {
+            id: serviceId,
+        },
+    });
+
+    if (!service) {
+        throw new Error("Service not found");
+    }
+
+    // Authorization
+    if (user.role !== UserRole.ADMIN) {
+        if (!user.technicianProfile) {
+            throw new Error(
+                "Only admins or technicians can delete services"
+            );
+        }
+
+        if (service.technicianId !== user.technicianProfile.id) {
+            throw new Error("You can only delete your own services");
+        }
+    }
+
+    const deletedService = await prisma.service.delete({
         where: {
             id: serviceId,
         },
         include: {
             category: true,
-        }
-    })
+        },
+    });
 
-    return null;
-}
+    return deletedService;
+};
 
 const getMyServices = async (userId: string) => {
 
@@ -137,5 +224,6 @@ export const serviceService = {
     createService,
     getAllServices,
     deleteService,
-    getMyServices
+    getMyServices,
+    updateService
 }

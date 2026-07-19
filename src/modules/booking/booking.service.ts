@@ -1,4 +1,4 @@
-import { BookingStatus, ServiceStatus } from "../../../generated/prisma/client";
+import { BookingStatus, ServiceStatus, UserRole } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
 import { IBookingPayload, IUpdateBookingStatusPayload } from "./booking.interface"
 
@@ -66,22 +66,24 @@ const createBooking = async (customerId: string, payload: IBookingPayload) => {
             }
         })
 
-        // await tx.service.update({
-        //     where: {
-        //         id: serviceId
-        //     },
-        //     data: {
-        //         status: ServiceStatus.ACTIVE
-        //     }
-        // })
-
         return booking
     })
 
     return transactionResult
 }
 
-const getAllBookings = async () => {
+const getAllBookings = async (adminId: string) => {
+
+    const admin = await prisma.user.findUnique({
+        where: {
+            id: adminId,
+        },
+    });
+
+    if (!admin || admin.role !== UserRole.ADMIN) {
+        throw new Error('Unauthorized');
+    }
+
     const bookings = await prisma.booking.findMany({
 
         include: {

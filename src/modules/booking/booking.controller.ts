@@ -18,7 +18,8 @@ const createBooking = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getAllBookings = catchAsync(async (req: Request, res: Response) => {
-    const bookings = await bookingService.getAllBookings();
+    const adminId = req.user?.id;
+    const bookings = await bookingService.getAllBookings(adminId as string);
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
@@ -40,7 +41,7 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
 
 const updateBookingStatus = catchAsync(async (req: Request, res: Response) => {
     const authorizedUserId = req.user?.id;
-    const payload =req.body
+    const payload = req.body
     const updatedBooking = await bookingService.updateBookingStatus(authorizedUserId as string, payload);
     sendResponse(res, {
         success: true,
