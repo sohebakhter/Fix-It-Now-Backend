@@ -10,3 +10,8 @@ export interface IRegisterUserPayload {
     experience?: number;
     rating?: number;
 }
+export interface IUpdateUserPayload {
+    name?: string;
+    // role?: UserRole;
+    experience?: number;
+}

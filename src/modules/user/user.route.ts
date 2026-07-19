@@ -7,7 +7,7 @@ const router = Router();
 
 router.post("/register", userController.registerUser);
 router.get("/me", auth(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.TECHNICIAN), userController.getMyProfile);
-router.put("/my-profile", userController.updateMyProfile);
-router.delete("/", userController.deleteMyProfile);
+router.patch("/my-profile", auth(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.TECHNICIAN), userController.updateMyProfile);
+router.delete("/my-profile", auth(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.TECHNICIAN), userController.deleteMyProfile);
 
 export const userRoutes = router;

@@ -1,4 +1,4 @@
-import { ServiceStatus, UserRole } from "../../../generated/prisma/enums";
+import { BookingStatus, ServiceStatus, UserRole } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IServicePayload } from "./service.interface";
 
@@ -117,6 +117,11 @@ const getMyServices = async (userId: string) => {
         },
         include: {
             category: true,
+            bookings: {
+                where: {
+                    status: BookingStatus.REQUESTED
+                }
+            }
         },
         orderBy: [
             {

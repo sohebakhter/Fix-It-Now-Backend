@@ -1,7 +1,7 @@
 import config from "../../config"
 import { prisma } from "../../lib/prisma"
 import bcrypt from "bcryptjs"
-import { IRegisterUserPayload } from "./user.interface"
+import { IRegisterUserPayload, IUpdateUserPayload } from "./user.interface"
 
 const registerUser = async (payload: IRegisterUserPayload) => {
 
@@ -77,9 +77,66 @@ const getMyProfile = (userId: string) => {
     return user
 }
 
-const updateMyProfile = () => { }
+const updateMyProfile = async (userId: string, payload: IUpdateUserPayload) => {
 
-const deleteMyProfile = () => { }
+    const { name, experience } = payload
+
+    const isUser = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }, include: {
+            technicianProfile: true
+        }
+    })
+
+    if (!isUser) {
+        throw new Error('User not found')
+    }
+
+    const user = await prisma.user.update({
+        where: {
+            id: userId,
+        },
+        data: {
+            name,
+            technicianProfile: {
+                update: {
+                    experience,
+                },
+            },
+        },
+        include: {
+            technicianProfile: true,
+        },
+    });
+
+    return user
+}
+
+const deleteMyProfile = async (userId: string) => {
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: userId
+        }
+    })
+
+    if (!user) {
+        throw new Error('User not found')
+    }
+
+    const isOwn = user.id === userId
+
+    if (!isOwn) {
+        throw new Error('You can only delete your own profile')
+    }
+
+    return prisma.user.delete({
+        where: {
+            id: userId
+        }
+    })
+}
 
 export const userService = {
     registerUser,
