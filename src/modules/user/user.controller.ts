@@ -67,7 +67,7 @@ const deleteMyProfile = catchAsync(async (req, res, next) => {
 const updateUser = catchAsync(async (req, res, next) => {
 
     const adminId = req.user?.id
-    const userId = req.params.id
+    const userId = req.params.userId
     const payload = req.body
 
     const result = await userService.updateUser(adminId as string, userId as string, payload)
@@ -84,7 +84,7 @@ const updateUser = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
 
     const adminId = req.user?.id
-    const userId = req.params.id
+    const userId = req.params.userId
 
     const result = await userService.deleteUser(adminId as string, userId as string)
 
