@@ -32,7 +32,32 @@ const handleStripeWebhook = catchAsync(async (req, res) => {
     });
 });
 
+const getPaymentHistory = catchAsync(async (req, res) => {
+    const userId = req.user?.id;
+    const paymentHistory = await paymentService.getPaymentHistory(userId!);
+    return sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Payment history fetched successfully",
+        data: paymentHistory,
+    });
+});
+
+const getPaymentDetails = catchAsync(async (req, res) => {
+    const userId = req.user?.id;
+    const paymentId = req.params.id;
+    const paymentDetails = await paymentService.getPaymentDetails(userId as string, paymentId as string);
+    return sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Payment details fetched successfully",
+        data: paymentDetails,
+    });
+});
+
 export const paymentController = {
     createCheckoutSession,
     handleStripeWebhook,
+    getPaymentHistory,
+    getPaymentDetails
 };

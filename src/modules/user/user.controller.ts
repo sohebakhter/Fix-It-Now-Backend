@@ -97,11 +97,27 @@ const deleteUser = catchAsync(async (req, res, next) => {
 
 })
 
+const getAllUsers = catchAsync(async (req, res, next) => {
+
+    const adminId = req.user?.id
+
+    const result = await userService.getAllUsers(adminId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Users fetched successfully',
+        data: result
+    })
+
+})
+
 export const userController = {
     registerUser,
     getMyProfile,
     updateMyProfile,
     deleteMyProfile,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUsers
 }

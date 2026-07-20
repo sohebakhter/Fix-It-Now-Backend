@@ -138,7 +138,38 @@ const handleStripeWebhook = async (payload: any, stripeSignature: string) => {
     }
 }
 
+const getPaymentHistory = async (userId: string) => {
+    const payments = await prisma.payment.findMany({
+        where: { customerId: userId },
+        include: { service: true },
+    });
+    return payments;
+}
+
+const getPaymentDetails = async (userId: string, paymentId: string) => {
+
+    const payment = await prisma.payment.findUnique({
+        where: { id: paymentId },
+        include: { service: true },
+    });
+    if (!payment) throw new Error("Payment not found");
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    const isAdmin = user?.role === UserRole.ADMIN;
+    const isPaymentOwner = payment.customerId === userId;
+
+    if (!isAdmin && !isPaymentOwner) {
+        throw new Error(
+            "Unauthorized: only admins or the payment customer can view payment details"
+        );
+    }
+    return payment;
+}
+
 export const paymentService = {
     createCheckoutSession,
     handleStripeWebhook,
+    getPaymentHistory,
+    getPaymentDetails
 }

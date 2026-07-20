@@ -185,11 +185,33 @@ const deleteUser = async (adminId: string, userId: string) => {
     })
 }
 
+const getAllUsers = async (adminId: string) => {
+
+    const isAdmin = await prisma.user.findUnique({
+        where: {
+            id: adminId
+        }
+    })
+
+    if (isAdmin?.role !== UserRole.ADMIN) {
+        throw new Error('Only admins can perform this action')
+    }
+
+    return await prisma.user.findMany({
+        include: {
+            technicianProfile: true
+        }, omit: {
+            password: true
+        }
+    })
+}
+
 export const userService = {
     registerUser,
     getMyProfile,
     updateMyProfile,
     deleteMyProfile,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUsers
 }
