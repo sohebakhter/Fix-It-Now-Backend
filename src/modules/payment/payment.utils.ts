@@ -22,7 +22,7 @@ export const handlePaymentIntentSucceeded = async (paymentIntent: Stripe.Payment
         if (booking) {
             await tx.booking.update({
                 where: { id: booking.id },
-                data: { status: BookingStatus.IN_PROGRESS },
+                data: { status: BookingStatus.PAID },
             });
         }
     })

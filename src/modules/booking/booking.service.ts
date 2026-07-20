@@ -1,4 +1,4 @@
-import { BookingStatus, ServiceStatus, UserRole } from "../../../generated/prisma/client";
+import { BookingStatus, PaymentStatus, ServiceStatus, UserRole } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
 import { IBookingPayload, IUpdateBookingStatusPayload } from "./booking.interface"
 
@@ -145,7 +145,10 @@ const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBoo
 
     if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.ACCEPTED) {
         nextStatus = BookingStatus.ACCEPTED;
-    } else if (booking.status === BookingStatus.IN_PROGRESS && status === BookingStatus.COMPLETED) {
+    } else if (booking.status === BookingStatus.PAID && status === BookingStatus.IN_PROGRESS) {
+        nextStatus = BookingStatus.IN_PROGRESS;
+    }
+    else if (booking.status === BookingStatus.IN_PROGRESS && status === BookingStatus.COMPLETED) {
         nextStatus = BookingStatus.COMPLETED;
     } else {
         throw new Error(`Invalid status transition from ${booking.status} to ${status}`);
@@ -168,9 +171,58 @@ const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBoo
     return updatedBooking;
 };
 
+const cancelBooking = async (authorizedUserId: string, bookingId: string) => {
+
+    const booking = await prisma.booking.findUnique({
+        where: { id: bookingId },
+        include: { payment: true }
+    });
+
+    if (!booking) {
+        throw new Error("Booking not found");
+    }
+
+    if (booking.customerId !== authorizedUserId) {
+        throw new Error("Unauthorized: You can only cancel your own booking");
+    }
+
+    const nonCancellableStatuses: BookingStatus[] = [
+        BookingStatus.IN_PROGRESS,
+        BookingStatus.COMPLETED,
+        BookingStatus.DECLINED,
+        BookingStatus.CANCELLED
+    ];
+
+    if (nonCancellableStatuses.includes(booking.status)) {
+        throw new Error(`Booking cannot be cancelled because it is already ${booking.status.toLowerCase()}`);
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+
+        const updatedBooking = await tx.booking.update({
+            where: { id: bookingId },
+            data: { status: BookingStatus.CANCELLED }
+        });
+
+
+        if (booking.payment?.status === PaymentStatus.PAID) {
+            await tx.payment.update({
+                where: { bookingId },
+                data: { status: PaymentStatus.REFUNDED }
+            });
+        }
+
+        return updatedBooking;
+    });
+
+    return result;
+};
+
+
 export const bookingService = {
     createBooking,
     getAllBookings,
     getMyBookings,
-    updateBookingStatus
+    updateBookingStatus,
+    cancelBooking
 }

@@ -13,4 +13,6 @@ router.delete("/my-profile", auth(UserRole.CUSTOMER, UserRole.ADMIN, UserRole.TE
 router.patch("/:userId", auth(UserRole.ADMIN), userController.updateUser);
 router.delete("/:userId", auth(UserRole.ADMIN), userController.deleteUser);
 
+// router.get("/", auth(UserRole.ADMIN), userController.getAllUsers);
+
 export const userRoutes = router;

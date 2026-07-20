@@ -1,5 +1,5 @@
 
-import { UserRole } from "../../../generated/prisma/enums";
+import { UserRole, UserStatus } from "../../../generated/prisma/enums";
 
 export interface IRegisterUserPayload {
     name: string;
@@ -19,7 +19,7 @@ export interface IUpdateUserPayloadForAdmin {
     name?: string;
     password?: string;
     role?: UserRole;
-
+    status?: UserStatus
     experience?: number;
     rating?: number;
 }

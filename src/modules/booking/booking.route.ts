@@ -14,4 +14,6 @@ router.get("/my-bookings", auth(UserRole.CUSTOMER), bookingController.getMyBooki
 
 router.patch("/technician", auth(UserRole.TECHNICIAN), bookingController.updateBookingStatus);
 
+router.patch("/:bookingId/cancel", auth(UserRole.CUSTOMER), bookingController.cancelBooking);
+
 export const bookingRoutes = router;

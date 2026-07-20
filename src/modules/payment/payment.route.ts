@@ -9,4 +9,6 @@ router.post("/checkout", auth(UserRole.CUSTOMER, UserRole.TECHNICIAN, UserRole.A
 
 router.post("/webhook", paymentController.handleStripeWebhook);
 
+// router.get("/history", auth(UserRole.CUSTOMER), paymentController.getPaymentHistory);
+
 export const paymentRoutes = router;

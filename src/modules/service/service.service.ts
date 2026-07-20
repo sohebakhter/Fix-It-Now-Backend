@@ -48,6 +48,7 @@ const getAllServices = async () => {
     const services = await prisma.service.findMany({
         include: {
             category: true,
+            technician: true
         },
         orderBy: [
             {
