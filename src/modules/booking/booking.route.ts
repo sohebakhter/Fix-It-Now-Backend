@@ -10,7 +10,7 @@ router.post("/create", auth(UserRole.CUSTOMER), bookingController.createBooking)
 //admin
 router.get("/", auth(UserRole.ADMIN), bookingController.getAllBookings);
 
-router.get("/my-bookings", auth(UserRole.CUSTOMER), bookingController.getMyBookings);
+router.get("/my-bookings", auth(UserRole.CUSTOMER, UserRole.TECHNICIAN), bookingController.getMyBookings);
 
 router.patch("/technician", auth(UserRole.TECHNICIAN), bookingController.updateBookingStatus);
 

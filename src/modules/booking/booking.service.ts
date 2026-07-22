@@ -99,22 +99,70 @@ const getAllBookings = async (adminId: string) => {
     return bookings;
 }
 
-const getMyBookings = async (customerId: string) => {
-    const bookings = await prisma.booking.findMany({
-        where: {
-            customerId: customerId
-        },
+const getMyBookings = async (userId: string) => {
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
         include: {
-            service: true,
-            availability: true,
-            customer: {
-                omit: {
-                    password: true,
-                }
-            }
-        }
+            technicianProfile: true,
+        },
     });
-    return bookings;
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    if (user.role === UserRole.CUSTOMER) {
+        return await prisma.booking.findMany({
+            where: {
+                customerId: userId,
+            },
+            include: {
+                customer: {
+                    omit: {
+                        password: true,
+                    },
+                },
+                service: true,
+                availability: true,
+                payment: true,
+            },
+        });
+    }
+
+    if (user.role === UserRole.TECHNICIAN) {
+        return await prisma.booking.findMany({
+            where: {
+                service: {
+                    technicianId: user.technicianProfile!.id,
+                },
+            },
+            include: {
+                customer: {
+                    omit: {
+                        password: true,
+                    },
+                },
+                service: true,
+                availability: true,
+                payment: true,
+            },
+        });
+    }
+
+    if (user.role === UserRole.ADMIN) {
+        return await prisma.booking.findMany({
+            include: {
+                customer: {
+                    omit: {
+                        password: true,
+                    },
+                },
+                service: true,
+                availability: true,
+                payment: true,
+            },
+        });
+    }
 }
 
 const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBookingStatusPayload) => {
