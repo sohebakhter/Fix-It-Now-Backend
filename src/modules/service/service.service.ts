@@ -1,6 +1,7 @@
 import { BookingStatus, ServiceStatus, UserRole, UserStatus } from "../../../generated/prisma/enums";
+import { ServiceWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
-import { IServicePayload, IServicePayloadForUpdate } from "./service.interface";
+import { IServicePayload, IServicePayloadForUpdate, IServiceQuery } from "./service.interface";
 
 const createService = async (userId: string, payload: IServicePayload) => {
     const transactionResult = await prisma.$transaction(async (tx) => {
@@ -51,17 +52,76 @@ const createService = async (userId: string, payload: IServicePayload) => {
 
 }
 
-const getAllServices = async () => {
+const getAllServices = async (query: IServiceQuery) => {
+
+    const limit = query.limit ? parseInt(query.limit) : 10
+    const page = query.page ? parseInt(query.page) : 1
+    const skip = (page - 1) * limit
+
+    const sortBy = query.sortBy || "createdAt"
+    const sortOrder = query.sortOrder || "desc"
+
+    //dynamic ([optimized] with array push method) filtering, searching
+    const andConditions: ServiceWhereInput[] = []
+
+    if (query.searchTerm) {
+        andConditions.push({
+            OR: [
+                {
+                    title: {
+                        contains: query.searchTerm,
+                        mode: "insensitive"
+                    }
+                },
+                {
+                    location: {
+                        contains: query.searchTerm,
+                        mode: "insensitive"
+                    }
+                }
+            ]
+        })
+    }
+    if (query.title) {
+        andConditions.push({
+            title: query.title
+        })
+    }
+
+    if (query.price) {
+        andConditions.push({
+            price: Number(query.price)
+        })
+    }
+
+    if (query.rating) {
+        andConditions.push({
+            technician: {
+                rating: {
+                    gte: Number(query.rating)
+                }
+            }
+        })
+    }
+
     const services = await prisma.service.findMany({
+        // dynamic searching, filtering --->
+        where: {
+            AND: andConditions
+        },
+
+        //dynamic pagination part
+        take: limit,
+        skip: skip,
+
+        orderBy: {
+            // sortBy : sortOrder
+            [sortBy]: sortOrder
+        },
         include: {
             category: true,
             technician: true
         },
-        orderBy: [
-            {
-                createdAt: "desc",
-            },
-        ]
     });
     return services;
 }
