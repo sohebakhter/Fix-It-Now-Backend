@@ -1,7 +1,18 @@
-const getTechnicianProfiles = async () => {
+import { prisma } from "../../lib/prisma"
 
+const getTechnicians = async () => {
+    const technicians = await prisma.technicianProfile.findMany({
+        include: {
+            user: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+    return technicians
 }
 
-export const technicianProfileController = {
-    getTechnicianProfiles
+export const technicianProfileService = {
+    getTechnicians
 }

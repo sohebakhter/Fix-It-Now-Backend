@@ -33,12 +33,14 @@ const registerUser = async (payload: IRegisterUserPayload) => {
             ...userData,
             password: hashPassword,
 
-            technicianProfile: {
-                create: {
-                    experience: experience ?? 0,
-                    rating: rating ?? 0,
+            ...(userData.role === UserRole.TECHNICIAN && {
+                technicianProfile: {
+                    create: {
+                        experience: experience ?? 0,
+                        rating: rating ?? 0,
+                    },
                 },
-            },
+            }),
         },
     });
 
