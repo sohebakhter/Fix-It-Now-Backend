@@ -14,6 +14,19 @@ const getTechnicians = catchAsync(async (req, res) => {
     });
 })
 
+const getTechnicianProfile = catchAsync(async (req, res) => {
+
+    const technicianId = req.params.technicianId
+    const technician = await technicianProfileService.getTechnicianProfile(technicianId as string);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Technician profile fetched successfully',
+        data: technician
+    });
+})
+
 export const technicianProfileController = {
-    getTechnicians
+    getTechnicians,
+    getTechnicianProfile
 }
