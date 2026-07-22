@@ -1,4 +1,4 @@
-import { BookingStatus, ServiceStatus, UserRole } from "../../../generated/prisma/enums";
+import { BookingStatus, ServiceStatus, UserRole, UserStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IServicePayload, IServicePayloadForUpdate } from "./service.interface";
 
@@ -19,10 +19,17 @@ const createService = async (userId: string, payload: IServicePayload) => {
             where: {
                 userId: userId,
             },
+            include: {
+                user: true
+            }
         });
 
         if (!technicianProfile) {
             throw new Error("Technician profile not found");
+        }
+
+        if (technicianProfile.user.status !== UserStatus.UN_BAN) {
+            throw new Error("Technician user is banned");
         }
 
         const service = await tx.service.create({

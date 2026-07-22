@@ -1,4 +1,4 @@
-import { BookingStatus, PaymentStatus, ServiceStatus, UserRole } from "../../../generated/prisma/client";
+import { BookingStatus, PaymentStatus, ServiceStatus, UserRole, UserStatus } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma"
 import { IBookingPayload, IUpdateBookingStatusPayload } from "./booking.interface"
 
@@ -46,6 +46,20 @@ const createBooking = async (customerId: string, payload: IBookingPayload) => {
 
         if (existingBooking) {
             throw new Error("This slot is already booked");
+        }
+
+        const user = await tx.user.findUnique({
+            where: {
+                id: customerId
+            }
+        })
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (user.status !== UserStatus.UN_BAN) {
+            throw new Error("User is banned");
         }
 
         const booking = await tx.booking.create({
