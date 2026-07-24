@@ -1,0 +1,933 @@
+{
+  "info": {
+    "_postman_id": "6edb6e51-739b-4b09-826b-c2e182c9ef08",
+    "name": "FixItNow",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52524169",
+    "_collection_link": "https://go.postman.co/collection/52524169-6edb6e51-739b-4b09-826b-c2e182c9ef08?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"soheb\",\r\n    \"email\": \"cussoheb@gmail.com\",\r\n    \"password\": \"123456\",\r\n    \"role\": \"CUSTOMER\",\r\n    \"experience\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/register",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Profile",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"soheb\",\r\n    \"email\": \"sohebakhterbadhan2@gmail.com\",\r\n    \"password\": \"123456\"\r\n    // \"role\": \"ADMIN\",\r\n    // \"experience\": 5\r\n}"
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/me",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/my-profile",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "my-profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"56b5e49b-e3a0-4b31-81e4-b133acdd6bb7\",\r\n    \"title\": \"Kitchen Pipe Repair\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500,\r\n    \"status\": \"PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/68uijwikr328402349283u43prjy9u3i",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "68uijwikr328402349283u43prjy9u3i"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete My Profile",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/my-profile",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "my-profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User(admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users/fdceb352-bb15-496b-a4a4-ce6af24b0deb",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users",
+                "fdceb352-bb15-496b-a4a4-ce6af24b0deb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceId\": \"cb18402a-3052-4c8d-97ee-fd58648ff351\",\r\n    \"availabilityId\": \"722f4f13-7ec0-40fe-8433-d6e5b0623ff9\"\r\n}"
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/users",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"cussoheb@gmail.com\",\r\n    // \"email\": \"techsoheb@gmail.com\",\r\n    // \"email\": \"adminsoheb@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/auth/login",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sohebakhterbadhan2@gmail.com\",\r\n    \"password\": \"123456\"\r\n}"
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/auth/refresh-token",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\":\"PLUMBING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/categories/create",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "categories",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ALL Categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"sohebakhterbadhan2@gmail.com\",\r\n    \"password\": \"123456\"\r\n}"
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/categories",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Service",
+      "item": [
+        {
+          "name": "Create Service",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"0475d2af-b647-4eff-8656-34b7d56b33f5\",\r\n    \"title\": \"Kitchen Pipe Repair 5\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/services/create",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "services",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Services",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"56b5e49b-e3a0-4b31-81e4-b133acdd6bb7\",\r\n    \"title\": \"Kitchen Pipe Repair\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500,\r\n    \"status\": \"PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/services",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "services"
+              ],
+              "query": [
+                {
+                  "key": "location",
+                  "value": "khulna",
+                  "disabled": true
+                },
+                {
+                  "key": "title",
+                  "value": "Kitchen Pipe Repair 2",
+                  "disabled": true
+                },
+                {
+                  "key": "serchTerm",
+                  "value": "Kitchen Pipe Repair 2",
+                  "disabled": true
+                },
+                {
+                  "key": "price",
+                  "value": "500",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Services",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"56b5e49b-e3a0-4b31-81e4-b133acdd6bb7\",\r\n    \"title\": \"Kitchen Pipe Repair\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500,\r\n    \"status\": \"PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/services/my-services",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "services",
+                "my-services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"56b5e49b-e3a0-4b31-81e4-b133acdd6bb7\",\r\n    \"title\": \"Kitchen Pipe Repair\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500,\r\n    \"status\": \"PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/services/aa46f7a8-9712-4b89-967b-134961218718",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "services",
+                "aa46f7a8-9712-4b89-967b-134961218718"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Service",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"categoryId\": \"56b5e49b-e3a0-4b31-81e4-b133acdd6bb7\",\r\n    \"title\": \"Kitchen Pipe Repair\",\r\n    \"description\": \"Professional kitchen pipe leakage repair service.\",\r\n    \"location\": \"Dhaka\",\r\n    \"price\": 500,\r\n    \"status\": \"PENDING\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/services/aa46f7a8-9712-4b89-967b-134961218718",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "services",
+                "aa46f7a8-9712-4b89-967b-134961218718"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Availability",
+      "item": [
+        {
+          "name": "Create Availability",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"date\": \"2026-07-20T00:00:00.000Z\",\r\n    \"startTime\": \"13:00\",\r\n    \"endTime\": \"14:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/availabilities/create",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "availabilities",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Availabilities",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"date\": \"2026-07-20T00:00:00.000Z\",\r\n    \"startTime\": \"12:00\",\r\n    \"endTime\": \"13:00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/availabilities",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "availabilities"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceId\": \"2c2f89c3-ecae-495d-90bd-357a17eb7bf3\",\r\n    \"availabilityId\": \"c1d9bfe8-4842-4cd7-a184-50df63a6f94b\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/bookings/create",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Bookings",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/bookings/my-bookings",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "my-bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Bookings",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceId\": \"cb18402a-3052-4c8d-97ee-fd58648ff351\",\r\n    \"availabilityId\": \"722f4f13-7ec0-40fe-8433-d6e5b0623ff9\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/bookings",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Booking Status (technician)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\": \"90a2bda3-022f-48c3-ae46-14bce55d24f4\",\r\n    \"status\": \"ACCEPTED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/bookings/technician",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "technician"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Booking (customer)",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"serviceId\": \"cb18402a-3052-4c8d-97ee-fd58648ff351\",\r\n    \"availabilityId\": \"722f4f13-7ec0-40fe-8433-d6e5b0623ff9\"\r\n}"
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/bookings/5d010627-5188-47b5-a88a-01763791a822/cancel",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "5d010627-5188-47b5-a88a-01763791a822",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Create Checkout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\": \"90a2bda3-022f-48c3-ae46-14bce55d24f4\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/payments/checkout",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "checkout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Payment History",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\": \"0feab109-f4b9-42b2-9a56-39aec071cafe\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/payments/history",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Payment Details",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\": \"0feab109-f4b9-42b2-9a56-39aec071cafe\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/payments/details/11c1bbdc-f700-403d-af38-3755fb9223de",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "details",
+                "11c1bbdc-f700-403d-af38-3755fb9223de"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Review",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"bookingId\": \"5d010627-5188-47b5-a88a-01763791a822\",\r\n  \"rating\": 4.5,\r\n  \"comment\": \"Very professional TECHNICIAN\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/reviews/create",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TechnicianProfile",
+      "item": [
+        {
+          "name": "get All Technicians",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/technicians",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "technicians"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Technician Profile and Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://fixitnow-gules.vercel.app/api/technicians/de1fab6b-0f71-4528-b3d2-f5e92e263632",
+              "protocol": "https",
+              "host": [
+                "fixitnow-gules",
+                "vercel",
+                "app"
+              ],
+              "path": [
+                "api",
+                "technicians",
+                "de1fab6b-0f71-4528-b3d2-f5e92e263632"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
