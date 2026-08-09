@@ -139,6 +139,7 @@ const getMyBookings = async (userId: string) => {
                 service: true,
                 availability: true,
                 payment: true,
+                review: true,
             },
         });
     }
