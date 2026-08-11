@@ -51,7 +51,35 @@ const getAllAvailabilities = async () => {
     return availabilities;
 }
 
+const myAvailability = async (technicianId: string) => {
+    const technicianProfile = await prisma.technicianProfile.findUnique({
+        where: {
+            userId: technicianId
+        }
+    });
+
+    if (!technicianProfile) {
+        throw new Error("Technician profile not found");
+    }
+
+    const myAvailability = await prisma.availability.findMany({
+        where: {
+            technicianId: technicianProfile.id
+        },
+        include: {
+            technicianProfile: true
+        },
+        orderBy: [
+            { date: "desc" },
+            { startTime: "desc" },
+        ]
+    });
+
+    return myAvailability;
+}
+
 export const availabilityService = {
     createAvailability,
-    getAllAvailabilities
+    getAllAvailabilities,
+    myAvailability
 }

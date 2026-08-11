@@ -27,7 +27,19 @@ const getAllAvailabilities = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const myAvailability = catchAsync(async (req: Request, res: Response) => {
+    const technicianId = req.user?.id;
+    const myAvailability = await availabilityService.myAvailability(technicianId as string);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'My availability fetched successfully',
+        data: myAvailability
+    });
+})
+
 export const availabilityController = {
     createAvailability,
-    getAllAvailabilities
+    getAllAvailabilities,
+    myAvailability
 }

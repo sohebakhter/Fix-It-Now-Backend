@@ -9,4 +9,6 @@ router.post("/create", auth(UserRole.TECHNICIAN), availabilityController.createA
 
 router.get("/", availabilityController.getAllAvailabilities);
 
+router.get("/my", auth(UserRole.TECHNICIAN), availabilityController.myAvailability);
+
 export const availabilityRoutes = router;
