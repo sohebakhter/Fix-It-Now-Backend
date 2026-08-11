@@ -208,6 +208,8 @@ const updateBookingStatus = async (authorizedUserId: string, payload: IUpdateBoo
 
     if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.ACCEPTED) {
         nextStatus = BookingStatus.ACCEPTED;
+    } else if (booking.status === BookingStatus.REQUESTED && status === BookingStatus.DECLINED) {
+        nextStatus = BookingStatus.DECLINED;
     } else if (booking.status === BookingStatus.PAID && status === BookingStatus.IN_PROGRESS) {
         nextStatus = BookingStatus.IN_PROGRESS;
     }
