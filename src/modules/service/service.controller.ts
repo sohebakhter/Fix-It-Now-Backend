@@ -39,6 +39,18 @@ const getMyServices = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getServiceDetails = catchAsync(async (req: Request, res: Response) => {
+    const authorizedUserId = req.user?.id;
+    const serviceId = req.params.serviceId;
+    const service = await serviceService.getServiceDetails(authorizedUserId as string, serviceId as string);
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'Service details fetched successfully',
+        data: service
+    });
+})
+
 const updateService = catchAsync(async (req: Request, res: Response) => {
     const authorizedUserId = req.user?.id;
     const serviceId = req.params.serviceId;
@@ -75,5 +87,6 @@ export const serviceController = {
     getAllServices,
     deleteService,
     getMyServices,
-    updateService
+    updateService,
+    getServiceDetails
 }

@@ -288,10 +288,48 @@ const getMyServices = async (userId: string) => {
 }
 
 
+const getServiceDetails = async (authorizedUserId: string, serviceId: string) => {
+
+    const user = await prisma.user.findUnique({
+        where: {
+            id: authorizedUserId,
+        }
+    });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    if (user.role !== UserRole.ADMIN && user.role !== UserRole.CUSTOMER) {
+        throw new Error("Only admins or customers can view service details");
+    }
+
+    const service = await prisma.service.findUnique({
+        where: {
+            id: serviceId,
+        },
+        include: {
+            category: true,
+            technician: true,
+            reviews: true,
+            _count: {
+                select: {
+                    bookings: true,
+                    reviews: true
+                }
+            }
+
+        },
+    });
+    return service;
+}
+
+
 export const serviceService = {
     createService,
     getAllServices,
     deleteService,
     getMyServices,
-    updateService
+    updateService,
+    getServiceDetails
 }

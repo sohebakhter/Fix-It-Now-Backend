@@ -11,6 +11,8 @@ router.get("/", serviceController.getAllServices);
 
 router.get("/my-services", auth(UserRole.TECHNICIAN), serviceController.getMyServices);
 
+router.get("/details/:serviceId", auth(UserRole.CUSTOMER, UserRole.ADMIN), serviceController.getServiceDetails);
+
 router.patch("/:serviceId", auth(UserRole.TECHNICIAN, UserRole.ADMIN), serviceController.updateService);
 
 router.delete("/:serviceId", auth(UserRole.TECHNICIAN, UserRole.ADMIN), serviceController.deleteService);
