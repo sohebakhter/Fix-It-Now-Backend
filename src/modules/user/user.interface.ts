@@ -3,6 +3,7 @@ import { UserRole, UserStatus } from "../../../generated/prisma/enums";
 
 export interface IRegisterUserPayload {
     name: string;
+    image: string;
     email: string;
     password: string;
     role?: UserRole;
@@ -12,7 +13,6 @@ export interface IRegisterUserPayload {
 }
 export interface IUpdateUserPayload {
     name?: string;
-    // role?: UserRole;
     experience?: number;
 }
 export interface IUpdateUserPayloadForAdmin {
