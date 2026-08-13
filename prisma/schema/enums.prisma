@@ -10,10 +10,9 @@ enum UserStatus {
 }
 
 enum ServiceStatus {
-  PENDING // Admin approval-এর অপেক্ষায়
-  ACTIVE // সবাই বুক করতে পারবে
-  INACTIVE // সাময়িকভাবে বন্ধ
-  CANCELLED // Permanently removed
+  PENDING
+  ACTIVE
+  INACTIVE
 }
 
 enum BookingStatus {

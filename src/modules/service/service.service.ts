@@ -187,6 +187,8 @@ const updateService = async (
             title: payload.title,
             description: payload.description,
             price: payload.price,
+            location: payload.location,
+            status: payload.status,
 
             ...(payload.categoryId && {
                 category: {
