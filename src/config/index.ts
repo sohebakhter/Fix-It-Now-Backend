@@ -15,4 +15,8 @@ export default {
     // stripe
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
     stripe_webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+
+    // for forget password
+    app_email: process.env.APP_EMAIL,
+    app_password: process.env.APP_PASSWORD
 };
