@@ -82,7 +82,7 @@ const getMyProfile = (userId: string) => {
 
 const updateMyProfile = async (userId: string, payload: IUpdateUserPayload) => {
 
-    const { name, experience } = payload
+    const { name, image, experience } = payload
 
     const isUser = await prisma.user.findUnique({
         where: {
@@ -102,6 +102,7 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserPayload) => {
         },
         data: {
             name,
+            image,
             technicianProfile: {
                 update: {
                     experience,
@@ -110,7 +111,9 @@ const updateMyProfile = async (userId: string, payload: IUpdateUserPayload) => {
         },
         include: {
             technicianProfile: true,
-        },
+        }, omit: {
+            password: true
+        }
     });
 
     return user
@@ -178,6 +181,10 @@ const deleteUser = async (adminId: string, userId: string) => {
 
     if (isAdmin?.role !== UserRole.ADMIN) {
         throw new Error('Only admins can perform this action')
+    }
+
+    if (adminId === userId) {
+        throw new Error('You cannot delete yourself')
     }
 
     return await prisma.user.delete({

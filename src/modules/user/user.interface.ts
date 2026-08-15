@@ -13,6 +13,7 @@ export interface IRegisterUserPayload {
 }
 export interface IUpdateUserPayload {
     name?: string;
+    image?: string;
     experience?: number;
 }
 export interface IUpdateUserPayloadForAdmin {
