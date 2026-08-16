@@ -101,7 +101,12 @@ const getAllBookings = async (adminId: string) => {
     const bookings = await prisma.booking.findMany({
 
         include: {
-            service: true,
+            service: {
+                include: {
+                    category: true
+                }
+            },
+            payment: true,
             availability: true,
             customer: {
                 omit: {
