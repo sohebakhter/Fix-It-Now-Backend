@@ -161,6 +161,10 @@ const updateUser = async (adminId: string, userId: string, payload: IUpdateUserP
         delete updateData.password;
     }
 
+    if (adminId === userId && payload.status === "BAN") {
+        throw new Error('You cannot ban yourself');
+    }
+
     const updatedUser = await prisma.user.update({
         where: { id: userId },
         data: updateData,
