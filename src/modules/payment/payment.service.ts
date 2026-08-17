@@ -141,7 +141,13 @@ const handleStripeWebhook = async (payload: any, stripeSignature: string) => {
 const getPaymentHistory = async (userId: string) => {
     const payments = await prisma.payment.findMany({
         where: { customerId: userId },
-        include: { service: true },
+        include: {
+            service: {
+                include: {
+                    category: true
+                }
+            }
+        },
     });
     return payments;
 }
