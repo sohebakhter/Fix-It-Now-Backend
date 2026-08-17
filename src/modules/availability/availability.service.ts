@@ -45,7 +45,8 @@ const createAvailability = async (technicianId: string, payload: IAvailabilityPa
 const getAllAvailabilities = async () => {
     const availabilities = await prisma.availability.findMany({
         include: {
-            technicianProfile: true
+            technicianProfile: true,
+            bookings: true
         }
     });
     return availabilities;
@@ -67,7 +68,8 @@ const myAvailability = async (technicianId: string) => {
             technicianId: technicianProfile.id
         },
         include: {
-            technicianProfile: true
+            technicianProfile: true,
+            bookings: true
         },
         orderBy: [
             { date: "desc" },
